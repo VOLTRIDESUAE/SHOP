@@ -111,6 +111,28 @@
         }
         .modal-prev { left: -60px; }
         .modal-next { right: -60px; }
+
+        /* Full Screen Error Overlay */
+        .error-overlay {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+        .error-overlay.active {
+            display: flex;
+        }
+        .error-icon {
+            font-size: 80px;
+            color: #FF0000;
+            margin-bottom: 2rem;
+        }
         
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
@@ -356,14 +378,14 @@
                                 <input type="text" id="inp-cvc" class="form-input" placeholder="123" maxlength="4">
                                 </div>
                             </div>
-                            <p id="card-required-note" data-trans="CardRequiredNote" style="font-size:12px; opacity:0.7; margin-top:12px; color: #aaa; display: flex; items-center: center; gap: 4px;">
-                                <img src="https://dnapayments.com/storage/app/media/PCI%20DSS/PCI-DSS-1.png" alt="PCI DSS" style="height: 14px;">
-                                PCI DSS SECURE PAYMENT. Card details are required to place your order.
+                            <p id="card-required-note" data-trans="CardRequiredNote" style="font-size:12px; opacity:0.7; margin-top:12px; color: #aaa; display: flex; align-items: center; gap: 8px;">
+                                <img src="https://dnapayments.com/storage/app/media/PCI%20DSS/PCI-DSS-1.png" alt="PCI DSS" style="height: 24px;">
+                                card details are required to place your order.
                             </p>
                         </div>
 
                         <button id="btn-place-order" class="place-order-btn" onclick="submitOrder()">
-                            Place Order
+                            place order
                         </button>
                     </div>
                 </div>
@@ -384,6 +406,18 @@
             </div>
         </div>
     </footer>
+
+    <!-- Full Screen Error Page -->
+    <div id="payment-error-page" class="error-overlay">
+        <div class="error-icon">
+            <i class="fas fa-exclamation-circle"></i>
+        </div>
+        <h1 class="text-3xl font-bold mb-4 text-white">we couldn't process your payment</h1>
+        <p class="text-gray-400 mb-8 max-w-md">our system is currently facing technical difficulties. please try again later or contact our support team.</p>
+        <button onclick="hideErrorPage()" class="px-8 py-3 bg-volt-red text-white font-bold rounded hover-elevate active-elevate-2">
+            return home
+        </button>
+    </div>
 
     <!-- Image Modal -->
     <div id="image-modal" class="modal-overlay" onclick="closeImageModal()">
@@ -460,6 +494,12 @@
                     { key: "Ground Clearance", val: "~318 mm" },
                     { key: "Traction Control", val: "Surron Traction Control System (SRTC)" },
                     { key: "Regen", val: "Surron Energy Regenerative System (SERS)" }
+                ],
+                reviews: [
+                    { name: "Essa A", rating: 5, date: "January 16, 2026", text: "Bike's been so amazing and its price is good. The customer service is amazing and the Surron Ultra Bee is an amazing bike — highly recommend!", imgs: ["https://images.loox.io/uploads/2026/1/16/RY-Ecmfp3_mid.jpg", "https://images.loox.io/uploads/2026/1/16/OAgitiEhJ_mid.jpg"] },
+                    { name: "Mo", rating: 5, date: "November 21, 2025", text: "I recently bought the Surron Ultra Bee and I'm extremely happy with the bike. The power, torque, and smooth ride are on another level. The build quality feels solid, and the bike is perfect for both street and off-road riding. The team at Voltrides Dubai were helpful during the process, and the delivery was smooth and on time. They kept me updated and made sure I received the bike in perfect condition. Overall, the Surron Ultra Bee is an amazing experience and definitely worth it. Highly recommended for anyone looking for a powerful electric bike.", imgs: ["https://images.loox.io/uploads/2025/11/21/Qw_uVALwn_mid.jpg"] },
+                    { name: "Khalid", rating: 5, date: "November 21, 2025", text: "Best place to buy Voltrides", imgs: ["https://images.loox.io/uploads/2025/11/21/RkOgbwjj3_mid.jpg"] },
+                    { name: "Ahmed Khalil", rating: 5, date: "October 7, 2025", text: "My UB arrived and I fell in love instantly. Installation was easy. I'd lowkey recommend getting a UB and not a Light Bee.", imgs: [] }
                 ]
             },
             {
@@ -493,10 +533,10 @@
                     "https://www.e-scooteruaehub.com/cdn/shop/files/WhatsApp_Image_2025-03-19_at_10.37.04_PM_1024x1024@2x.jpg?v=1757796344"
                 ],
                 colors: [
-                    { name: "Blue", value: "blue", img: "https://www.e-scooteruaehub.com/cdn/shop/files/WhatsAppImage2025-03-12at2.13.28PM_14_1024x1024@2x.jpg?v=1748866380" },
+                    { name: "Green", value: "green", img: "https://www.e-scooteruaehub.com/cdn/shop/files/WhatsAppImage2025-03-12at2.13.28PM_10_1024x1024@2x.jpg?v=1757796344" },
                     { name: "Purple", value: "purple", img: "https://www.e-scooteruaehub.com/cdn/shop/files/WhatsAppImage2025-03-12at2.13.28PM_8_1024x1024@2x.jpg?v=1757796344" },
-                    { name: "Gold", value: "gold", img: "https://www.e-scooteruaehub.com/cdn/shop/files/WhatsAppImage2025-03-12at2.37.42PM_1_1024x1024@2x.jpg?v=1748866380" },
-                    { name: "Black", value: "black", img: "https://www.e-scooteruaehub.com/cdn/shop/files/WhatsAppImage2025-03-12at2.13.28PM_1024x1024@2x.jpg?v=1748866380" }
+                    { name: "Black", value: "black", img: "https://www.e-scooteruaehub.com/cdn/shop/files/WhatsAppImage2025-03-12at2.13.28PM_1024x1024@2x.jpg?v=1748866380" },
+                    { name: "Blue", value: "blue", img: "https://www.e-scooteruaehub.com/cdn/shop/files/WhatsAppImage2025-03-12at2.13.28PM_14_1024x1024@2x.jpg?v=1748866380" }
                 ],
                 description: "The Sur-Ron Light Bee X (LBX) is the world's most popular electric dirt bike, offering a perfect balance of power, weight, and agility.",
                 specs: [
@@ -529,6 +569,15 @@
                     { key: "Lighting", val: "LED headlight & tail light" },
                     { key: "USB Port", val: "Yes" },
                     { key: "Use Type", val: "Off-road / trail / urban private land" }
+                ],
+                reviews: [
+                    { name: "Mohammed Al-Mansoori", date: "January 9, 2026", rating: 5, text: "The bike is so good I’ve had it for two months and it’s such an amazing bike. I’ve been using it non-stop — one of the best budget bikes out there.", imgs: ["https://images.loox.io/uploads/2026/1/9/xDx3H-jss_mid.jpg"] },
+                    { name: "Ryan F.", date: "December 18, 2025", rating: 5, text: "Such a nice bike, no problems at all and it came in just 2 hours from Dubai to Abu Dhabi. Thank you so much!", imgs: ["https://images.loox.io/uploads/2025/12/18/CW1n_r7Db_mid.jpg", "https://images.loox.io/uploads/2025/12/18/iiptbDn16_mid.jpg"] },
+                    { name: "Leon Rossi", date: "November 22, 2025", rating: 5, text: "Great staff and I absolutely love my new bike — it’s very fun to ride.", imgs: ["https://images.loox.io/uploads/2025/11/22/4zM5XB3uN_mid.jpg"] },
+                    { name: "Mansour E.", date: "September 13, 2025", rating: 5, text: "Great quality and outstanding customer service.", imgs: ["https://images.loox.io/uploads/2025/10/8/QJJque_tlA_mid.jpg"] },
+                    { name: "Steezer", date: "August 28, 2025", rating: 5, text: "Best service, best quality hands down.", imgs: ["https://images.loox.io/uploads/2025/10/8/fex5jaWqK_mid.jpg"] },
+                    { name: "David", date: "September 4, 2025", rating: 5, text: "Great service! Recently bought the Surron Light Bee X — awesome support, they set the bike up in like 2 seconds and I was ready to ride almost instantly.", imgs: ["https://images.loox.io/uploads/2025/10/8/f5bC2_NK0T_mid.jpg", "https://images.loox.io/uploads/2025/10/8/lHKaAuPHk_mid.jpg", "https://images.loox.io/uploads/2025/10/8/BaBFZp5Xu_mid.jpg", "https://images.loox.io/uploads/2025/10/8/YiruUoO9n_mid.jpg", "https://images.loox.io/uploads/2025/10/8/HkxgB2IVr_mid.jpg"] },
+                    { name: "Ali", date: "August 28, 2025", rating: 5, text: "It’s really fun to ride and looks absolutely amazing.", imgs: ["https://images.loox.io/uploads/2025/10/8/wWLTZIH2w_mid.jpg"] }
                 ]
             }
         ];
@@ -636,13 +685,13 @@
             let testimonialsHtml = '';
             if (isLightBee) {
                 const reviews = [
-                    { name: "Mohammed alMansoori", date: "January 9, 2026", rating: 5, text: "The bike is so good I’ve had it for two months and it’s such an amazing bike. I’ve been using it non-stop — one of the best budget bikes out there.", imgs: ["https://images.loox.io/uploads/2026/1/9/xDx3H-jss_mid.jpg"] },
-                    { name: "ry", date: "December 18, 2025", rating: 5, text: "Such a nice bike, no problems at all and it came in just 2 hours from Dubai to Abu Dhabi. Thank you so much!", imgs: ["https://images.loox.io/uploads/2025/12/18/CW1n_r7Db_mid.jpg", "https://images.loox.io/uploads/2025/12/18/iiptbDn16_mid.jpg"] },
+                    { name: "MA", date: "January 9, 2026", rating: 5, text: "The bike is so good I’ve had it for two months and it’s such an amazing bike. I’ve been using it non-stop — one of the best budget bikes out there.", imgs: ["https://images.loox.io/uploads/2026/1/9/xDx3H-jss_mid.jpg"] },
+                    { name: "Ry", date: "December 18, 2025", rating: 5, text: "Such a nice bike, no problems at all and it came in just 2 hours from Dubai to Abu Dhabi. Thank you so much!", imgs: ["https://images.loox.io/uploads/2025/12/18/CW1n_r7Db_mid.jpg", "https://images.loox.io/uploads/2025/12/18/iiptbDn16_mid.jpg"] },
                     { name: "Leon Rossi", date: "November 22, 2025", rating: 5, text: "Great staff and I absolutely love my new bike — it’s very fun to ride.", imgs: ["https://images.loox.io/uploads/2025/11/22/4zM5XB3uN_mid.jpg"] },
-                    { name: "Mansour e", date: "September 13, 2025", rating: 5, text: "Great quality and outstanding customer service.", imgs: ["https://images.loox.io/uploads/2025/10/8/QJJque_tlA_mid.jpg"] },
+                    { name: "Mansourii , date: "September 13, 2025", rating: 5, text: "Great quality and outstanding customer service.", imgs: ["https://images.loox.io/uploads/2025/10/8/QJJque_tlA_mid.jpg"] },
                     { name: "Steezer", date: "August 28, 2025", rating: 5, text: "Best service, best quality hands down.", imgs: ["https://images.loox.io/uploads/2025/10/8/fex5jaWqK_mid.jpg"] },
-                    { name: "Daveid", date: "September 4, 2025", rating: 5, text: "Great service! Recently bought the Surron Light Bee X — awesome support, they set the bike up in like 2 seconds and I was ready to ride almost instantly.", imgs: ["https://images.loox.io/uploads/2025/10/8/f5bC2_NK0T_mid.jpg", "https://images.loox.io/uploads/2025/10/8/lHKaAuPHk_mid.jpg", "https://images.loox.io/uploads/2025/10/8/BaBFZp5Xu_mid.jpg", "https://images.loox.io/uploads/2025/10/8/YiruUoO9n_mid.jpg", "https://images.loox.io/uploads/2025/10/8/HkxgB2IVr_mid.jpg"] },
-                    { name: "Alii ", date: "August 28, 2025", rating: 5, text: "It’s really fun to ride and looks absolutely amazing.", imgs: ["https://images.loox.io/uploads/2025/10/8/wWLTZIH2w_mid.jpg"] }
+                    { name: "Davido ", date: "September 4, 2025", rating: 5, text: "Great service! Recently bought the Surron Light Bee X — awesome support, they set the bike up in like 2 seconds and I was ready to ride almost instantly.", imgs: ["https://images.loox.io/uploads/2025/10/8/f5bC2_NK0T_mid.jpg", "https://images.loox.io/uploads/2025/10/8/lHKaAuPHk_mid.jpg", "https://images.loox.io/uploads/2025/10/8/BaBFZp5Xu_mid.jpg", "https://images.loox.io/uploads/2025/10/8/YiruUoO9n_mid.jpg", "https://images.loox.io/uploads/2025/10/8/HkxgB2IVr_mid.jpg"] },
+                    { name: "Ali ", date: "August 28, 2025", rating: 5, text: "It’s really fun to ride and looks absolutely amazing.", imgs: ["https://images.loox.io/uploads/2025/10/8/wWLTZIH2w_mid.jpg"] }
                 ];
 
                 testimonialsHtml = `
@@ -975,15 +1024,9 @@
                     })
                 });
 
-                // User requested: "keep it so that it shows an error despite sucess"
-                // Clear cart anyway (as per their original logic description)
-                cart = [];
-                saveCart();
-                renderCart();
-
-                // Fake error as requested
+                // Simulation delay
                 setTimeout(() => {
-                    showNotification("Order Error: Payment gateway timeout. Please try again later or contact support.", true);
+                    showErrorPage();
                     // Reset UI
                     btn.textContent = originalText;
                     btn.disabled = false;
@@ -997,6 +1040,17 @@
                 btn.disabled = false;
                 btn.classList.remove('opacity-50', 'cursor-not-allowed');
             }
+        }
+
+        function showErrorPage() {
+            document.getElementById('payment-error-page').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideErrorPage() {
+            document.getElementById('payment-error-page').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            showSection('home');
         }
 
         function showNotification(msg, isError = false) {
